@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - McGibs Digital Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .toggle-eye {
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 38px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Register</h2>
+    <form id="registerForm" class="mx-auto" style="max-width: 400px;" autocomplete="on">
+      <div class="mb-3">
+        <label for="regEmail" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="regEmail" required autocomplete="email">
+      </div>
+      <div class="mb-3 position-relative">
+        <label for="regPassword" class="form-label">Password</label>
+        <input type="password" class="form-control" id="regPassword" required autocomplete="new-password">
+        <span class="toggle-eye" onclick="togglePassword('regPassword', this)">👁️</span>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+      <p class="text-center mt-3">Already have an account? <a href="login.html">Login here</a></p>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+      } else {
+        input.type = "password";
+        icon.textContent = "👁️";
+      }
+    }
+
+    function validatePassword(password) {
+      return (
+        password.length >= 5 &&
+        /[a-zA-Z]/.test(password) &&
+        /[0-9]/.test(password)
+      );
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value.trim();
+
+      if (!validatePassword(password)) {
+        alert("Password must be at least 5 characters, include one letter and one number.");
+        return;
+      }
+
+      if (localStorage.getItem(email)) {
+        alert("Account already exists.");
+        return;
+      }
+
+      localStorage.setItem(email, JSON.stringify({ password, downloads: 0, premium: false }));
+      alert("Registration successful. You can now log in.");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
